@@ -12,31 +12,74 @@
     <p>{{ session('success') }}</p>
 @endif
 
+@if (session('error'))
+    <p>{{ session('error') }}</p>
+@endif
+
 <a href="{{ route('admin.users.create') }}">
-    Yeni kullanıcı ekle
+    Yeni Kullanıcı Ekle
 </a>
 
 <hr>
 
-<table border="1" cellpadding="10">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>User Title</th>
-        </tr>
-    </thead>
+<form method="POST" action="{{ route('admin.users.bulkDelete') }}">
+    @csrf
+    @method('DELETE')
 
-    <tbody>
-        @foreach ($users as $user)
+    <button type="submit">
+        Seçilenleri Sil
+    </button>
+
+    <br><br>
+
+    <table border="1" cellpadding="10">
+        <thead>
             <tr>
-                <td>{{ $user->id }}</td>
-                <td>{{ $user->username }}</td>
-                <td>{{ $user->user_title }}</td>
+                <th>Seç</th>
+                <th>ID</th>
+                <th>Username</th>
+                <th>User Title</th>
+                <th>İşlemler</th>
             </tr>
-        @endforeach
-    </tbody>
-</table>
+        </thead>
+
+        <tbody>
+            @forelse ($users as $user)
+                <tr>
+                    <td>
+                        <input
+                            type="checkbox"
+                            name="user_ids[]"
+                            value="{{ $user->id }}"
+                        >
+                    </td>
+
+                    <td>{{ $user->id }}</td>
+                    <td>{{ $user->username }}</td>
+                    <td>{{ $user->user_title }}</td>
+
+                    <td>
+                        <a href="{{ route('admin.users.edit', $user->id) }}">
+                            Düzenle
+                        </a>
+
+                        |
+
+                        <a href="{{ route('admin.users.delete', $user->id) }}">
+                            Sil
+                        </a>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="5">
+                        Kayıtlı kullanıcı bulunamadı.
+                    </td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</form>
 
 </body>
 </html>

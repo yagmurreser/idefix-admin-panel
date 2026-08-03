@@ -37,4 +37,21 @@ class AdminUserController extends Controller
             ->route('admin.users.index')
             ->with('success', 'Kullanıcı başarıyla eklendi.');
     }
+
+    public function bulkDelete(Request $request)
+    {
+        $userIds = $request->input('user_ids', []);
+
+        if (empty($userIds)) {
+            return redirect()
+                ->route('admin.users.index')
+                ->with('error', 'Silinecek kullanıcılar seçilmedi.');
+        }
+
+        User::whereIn('id', $userIds)->delete();
+
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success', 'Seçilen kullanıcılar başarıyla silindi.');
+    }
 }

@@ -13,10 +13,11 @@ Route::post('/login', [LoginController::class, 'login'])
 Route::post('/logout', [LoginController::class, 'logout'])
     ->name('logout');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth')->name('dashboard');
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
     Route::get('/admin/users', [AdminUserController::class, 'index'])
         ->name('admin.users.index');
 
@@ -25,4 +26,13 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/admin/users', [AdminUserController::class, 'store'])
         ->name('admin.users.store');
+
+    Route::delete('/admin/users', [AdminUserController::class, 'bulkDelete'])
+        ->name('admin.users.bulkDelete');
+
+    Route::get('/admin/users/{user}/edit', [AdminUserController::class, 'edit'])
+        ->name('admin.users.edit');
+
+    Route::get('/admin/users/{user}/delete', [AdminUserController::class, 'delete'])
+        ->name('admin.users.delete');
 });

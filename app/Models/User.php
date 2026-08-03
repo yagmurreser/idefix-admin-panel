@@ -15,7 +15,6 @@ use Illuminate\Notifications\Notifiable;
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, SoftDeletes;
 
     /**
@@ -26,7 +25,6 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            
             'password' => 'hashed',
         ];
     }

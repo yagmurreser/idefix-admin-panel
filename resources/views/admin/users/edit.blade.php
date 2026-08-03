@@ -2,11 +2,11 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Yeni Kullanıcı Ekle</title>
+    <title>Edit User</title>
 </head>
 <body>
 
-<h1>Yeni Kullanıcı Ekle</h1>
+<h1>Edit User</h1>
 
 @if ($errors->any())
     <div>
@@ -18,15 +18,16 @@
     </div>
 @endif
 
-<form method="POST" action="{{ route('admin.users.store') }}">
+<form method="POST" action="{{ route('admin.users.update', $user->id) }}">
     @csrf
+    @method('PUT')
 
     <label for="username">Username</label>
     <input
         type="text"
         id="username"
         name="username"
-        value="{{ old('username') }}"
+        value="{{ old('username', $user->username) }}"
     >
 
     <br><br>
@@ -36,7 +37,7 @@
         type="text"
         id="user_title"
         name="user_title"
-        value="{{ old('user_title') }}"
+        value="{{ old('user_title', $user->user_title) }}"
     >
 
     <br><br>
@@ -50,10 +51,10 @@
 
     <br><br>
 
-    <button type="submit">Kaydet</button>
+    <button type="submit">Update</button>
 
     <a href="{{ route('admin.users.index') }}">
-        Kullanıcı Listesine Dön
+        Back
     </a>
 </form>
 

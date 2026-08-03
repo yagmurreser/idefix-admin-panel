@@ -9,7 +9,7 @@
 
     <h2>Admin Giriş</h2>
 
-    <form method="POST" action="{{ route('login.submit') }}">
+    <form method="POST" action="{{ route('login') }}">
         @csrf
  
         <div>

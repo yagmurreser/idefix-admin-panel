@@ -33,6 +33,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/users/{user}/edit', [AdminUserController::class, 'edit'])
         ->name('admin.users.edit');
 
+    Route::put('/admin/users/{user}', [AdminUserController::class, 'update'])
+        ->name('admin.users.update');
+
     Route::get('/admin/users/{user}/delete', [AdminUserController::class, 'delete'])
         ->name('admin.users.delete');
 });

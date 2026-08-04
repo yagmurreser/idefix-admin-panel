@@ -2,18 +2,27 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
+    <title>Admin Paneli</title>
 </head>
 <body>
 
-    <h1>Admin Paneli</h1>
+<h1>Admin Paneli</h1>
 
-    <p>Hoş geldiniz.</p>
+<p>Hoş geldiniz.</p>
 
-    <form action="{{ route('logout') }}" method="POST">
-        @csrf
-        <button type="submit">Çıkış Yap</button>
-    </form>
+<a href="{{ route('admin.users.index') }}">
+    Admin Kullanıcıları
+</a>
+
+<br><br>
+
+<form method="POST" action="{{ route('logout') }}">
+    @csrf
+
+    <button type="submit">
+        Çıkış Yap
+    </button>
+</form>
 
 </body>
 </html>

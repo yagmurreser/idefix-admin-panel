@@ -54,4 +54,45 @@ class AdminUserController extends Controller
             ->route('admin.users.index')
             ->with('success', 'Seçilen kullanıcılar başarıyla silindi.');
     }
+
+    public function edit(User $user)
+    {
+        return view('admin.users.edit', compact('user'));
+    }
+
+    public function update(Request $request, User $user)
+    {
+        $validatedData = $request->validate([
+            'username' => [
+                'required',
+                'string',
+                'max:255',
+                'alpha_num',
+                'unique:users,username,' . $user->id,
+            ],
+            'user_title' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+            'password' => [
+                'nullable',
+                'string',
+                'min:6',
+            ],
+        ]);
+
+        $user->username = $validatedData['username'];
+        $user->user_title = $validatedData['user_title'];
+
+        if ($request->filled('password')) {
+            $user->password = bcrypt($validatedData['password']);
+        }
+
+        $user->save();
+
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success', 'Kullanıcı başarıyla güncellendi.');
+    }
 }

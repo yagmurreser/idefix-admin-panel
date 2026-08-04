@@ -4,16 +4,16 @@ use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/login', [LoginController::class, 'showLoginForm'])
+    Route::get('/login', [LoginController::class, 'showLoginForm'])
     ->name('login');
 
-Route::post('/login', [LoginController::class, 'login'])
+    Route::post('/login', [LoginController::class, 'login'])
     ->name('login.submit');
 
-Route::post('/logout', [LoginController::class, 'logout'])
+    Route::post('/logout', [LoginController::class, 'logout'])
     ->name('logout');
 
-Route::middleware('auth')->group(function () {
+    Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -30,6 +30,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/admin/users', [AdminUserController::class, 'bulkDelete'])
         ->name('admin.users.bulkDelete');
 
+    Route::delete('/admin/users/{user}', [AdminUserController::class, 'destroy'])
+        ->name('admin.users.destroy');
+
     Route::get('/admin/users/{user}/edit', [AdminUserController::class, 'edit'])
         ->name('admin.users.edit');
 
@@ -38,4 +41,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/admin/users/{user}/delete', [AdminUserController::class, 'delete'])
         ->name('admin.users.delete');
+
+    
 });

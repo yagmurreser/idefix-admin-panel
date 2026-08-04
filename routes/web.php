@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
+
 
     Route::get('/login', [LoginController::class, 'showLoginForm'])
     ->name('login');
@@ -14,6 +16,12 @@ use Illuminate\Support\Facades\Route;
     ->name('logout');
 
     Route::middleware('auth')->group(function () {
+    
+    Route::get('/admin/categories/create', [CategoryController::class, 'create'])
+    ->name('admin.categories.create');
+
+    Route::post('/admin/categories', [CategoryController::class, 'store'])
+    ->name('admin.categories.store');
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');

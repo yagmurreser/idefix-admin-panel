@@ -95,4 +95,18 @@ class AdminUserController extends Controller
             ->route('admin.users.index')
             ->with('success', 'Kullanıcı başarıyla güncellendi.');
     }
+
+    public function delete(User $user)
+    {
+        return view('admin.users.delete', compact('user'));
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success', 'Kullanıcı başarıyla silindi.');
+    }
 }

@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Category;
+use Illuminate\Http\Request;
+
+class CategoryController extends Controller
+{
+    public function create()
+    {
+        return view('admin.categories.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'category_title' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:categories,category_title',
+            ],
+            'category_description' => [
+                'nullable',
+                'string',
+            ],
+            'status' => [
+                'required',
+                'boolean',
+            ],
+        ]);
+
+        Category::create($validated);
+
+        return redirect()
+            ->route('admin.categories.create')
+            ->with('success', 'Kategori başarıyla eklendi.');
+    }
+}

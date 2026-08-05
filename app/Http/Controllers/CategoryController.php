@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    public function index()
+    {
+        $categories = Category::all();
+
+        return view('admin.categories.index', compact('categories'));
+    }
+
     public function create()
     {
         return view('admin.categories.create');
@@ -36,5 +43,15 @@ class CategoryController extends Controller
         return redirect()
             ->route('admin.categories.create')
             ->with('success', 'Kategori başarıyla eklendi.');
+    }
+
+    public function edit(Category $category)
+    {
+        return view('admin.categories.edit', compact('category'));
+    }
+
+    public function delete(Category $category)
+    {
+        return view('admin.categories.delete', compact('category'));
     }
 }

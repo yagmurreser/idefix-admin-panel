@@ -7,24 +7,34 @@ use Illuminate\Support\Facades\Route;
 
 
     Route::get('/login', [LoginController::class, 'showLoginForm'])
-    ->name('login');
+        ->name('login');
 
     Route::post('/login', [LoginController::class, 'login'])
-    ->name('login.submit');
+        ->name('login.submit');
 
     Route::post('/logout', [LoginController::class, 'logout'])
-    ->name('logout');
+        ->name('logout');
 
     Route::middleware('auth')->group(function () {
     
     Route::get('/admin/categories/create', [CategoryController::class, 'create'])
-    ->name('admin.categories.create');
+        ->name('admin.categories.create');
+
+    Route::get('/admin/categories', [CategoryController::class, 'index'])
+        ->name('admin.categories.index');
 
     Route::post('/admin/categories', [CategoryController::class, 'store'])
-    ->name('admin.categories.store');
-    Route::get('/dashboard', function () {
+        ->name('admin.categories.store');
+
+    Route::get('/admin/categories/{category}/edit', [CategoryController::class, 'edit'])
+        ->name('admin.categories.edit');
+        
+    Route::get('/admin/categories/{category}/delete', [CategoryController::class, 'delete'])
+        ->name('admin.categories.delete');    
+
+     Route::get('/dashboard', function () {
         return view('dashboard');
-    })->name('dashboard');
+    })  ->name('dashboard');
 
     Route::get('/admin/users', [AdminUserController::class, 'index'])
         ->name('admin.users.index');

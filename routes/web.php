@@ -30,7 +30,10 @@ use Illuminate\Support\Facades\Route;
         ->name('admin.categories.edit');
         
     Route::get('/admin/categories/{category}/delete', [CategoryController::class, 'delete'])
-        ->name('admin.categories.delete');    
+        ->name('admin.categories.delete');   
+        
+    Route::put('/admin/categories/{category}', [CategoryController::class, 'update'])
+    ->name('admin.categories.update');
 
      Route::get('/dashboard', function () {
         return view('dashboard');

@@ -80,4 +80,13 @@ class CategoryController extends Controller
     {
         return view('admin.categories.delete', compact('category'));
     }
+
+    public function destroy(Category $category)
+    {
+        $category->delete();
+
+        return redirect()
+            ->route('admin.categories.index')
+            ->with('success', 'Kategori başarıyla silindi.');
+    }
 }

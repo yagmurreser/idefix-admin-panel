@@ -5,18 +5,17 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/login', [LoginController::class, 'showLoginForm'])
+    ->name('login');
 
-    Route::get('/login', [LoginController::class, 'showLoginForm'])
-        ->name('login');
+Route::post('/login', [LoginController::class, 'login'])
+    ->name('login.submit');
 
-    Route::post('/login', [LoginController::class, 'login'])
-        ->name('login.submit');
+Route::post('/logout', [LoginController::class, 'logout'])
+    ->name('logout');
 
-    Route::post('/logout', [LoginController::class, 'logout'])
-        ->name('logout');
+Route::middleware('auth')->group(function () {
 
-    Route::middleware('auth')->group(function () {
-    
     Route::get('/admin/categories/create', [CategoryController::class, 'create'])
         ->name('admin.categories.create');
 
@@ -28,16 +27,19 @@ use Illuminate\Support\Facades\Route;
 
     Route::get('/admin/categories/{category}/edit', [CategoryController::class, 'edit'])
         ->name('admin.categories.edit');
-        
-    Route::get('/admin/categories/{category}/delete', [CategoryController::class, 'delete'])
-        ->name('admin.categories.delete');   
-        
-    Route::put('/admin/categories/{category}', [CategoryController::class, 'update'])
-    ->name('admin.categories.update');
 
-     Route::get('/dashboard', function () {
+    Route::get('/admin/categories/{category}/delete', [CategoryController::class, 'delete'])
+        ->name('admin.categories.delete');
+
+    Route::put('/admin/categories/{category}', [CategoryController::class, 'update'])
+        ->name('admin.categories.update');
+
+    Route::delete('/admin/categories/{category}', [CategoryController::class, 'destroy'])
+        ->name('admin.categories.destroy');
+
+    Route::get('/dashboard', function () {
         return view('dashboard');
-    })  ->name('dashboard');
+    })->name('dashboard');
 
     Route::get('/admin/users', [AdminUserController::class, 'index'])
         ->name('admin.users.index');
@@ -62,6 +64,4 @@ use Illuminate\Support\Facades\Route;
 
     Route::get('/admin/users/{user}/delete', [AdminUserController::class, 'delete'])
         ->name('admin.users.delete');
-
-    
 });

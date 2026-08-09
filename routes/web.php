@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])
@@ -64,4 +65,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/admin/users/{user}/delete', [AdminUserController::class, 'delete'])
         ->name('admin.users.delete');
+
+    Route::get('/admin/products/create', [ProductController::class, 'create'])
+        ->name('admin.products.create');
+
+    Route::post('/admin/products', [ProductController::class, 'store'])
+        ->name('admin.products.store');
 });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -81,12 +82,15 @@ class CategoryController extends Controller
         return view('admin.categories.delete', compact('category'));
     }
 
-    public function destroy(Category $category)
-    {
-        $category->delete();
+   public function destroy(Category $category)
+{
+    Product::where('category_id', $category->id)
+        ->update(['category_id' => null]);
 
-        return redirect()
-            ->route('admin.categories.index')
-            ->with('success', 'Kategori başarıyla silindi.');
-    }
+    $category->delete();
+
+    return redirect()
+        ->route('admin.categories.index')
+        ->with('success', 'Kategori başarıyla silindi.');
+}
 }

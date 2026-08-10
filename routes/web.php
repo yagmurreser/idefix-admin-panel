@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/admin/users', [AdminUserController::class, 'bulkDelete'])
         ->name('admin.users.bulkDelete');
+    
 
     Route::delete('/admin/users/{user}', [AdminUserController::class, 'destroy'])
         ->name('admin.users.destroy');
@@ -71,4 +72,22 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/admin/products', [ProductController::class, 'store'])
         ->name('admin.products.store');
+
+    Route::get('/admin/products', [ProductController::class, 'index'])
+        ->name('admin.products.index');
+    
+    Route::get('/admin/products/{product}/edit', [ProductController::class, 'edit'])
+    ->name('admin.products.edit');
+
+    Route::get('/admin/products/{product}/delete', [ProductController::class, 'delete'])
+    ->name('admin.products.delete');
+
+    Route::delete('/admin/products/{product}', [ProductController::class, 'destroy'])
+    ->name('admin.products.destroy');
+    
+    Route::put('/admin/products/{product}', [ProductController::class, 'update'])
+        ->name('admin.products.update');
+        
+
+
 });

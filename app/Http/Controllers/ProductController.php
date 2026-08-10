@@ -97,13 +97,13 @@ class ProductController extends Controller
         return view('admin.products.delete', compact('product'));
     }
 
-    public function destroy(Product $product)
-{
+    public function destroy(Product $product) 
+    {
     $product->delete();
 
     return redirect()
-        ->route('admin.products.index');
-}
-
+        ->route('admin.products.index')
+        ->with('success', 'Ürün silindi.');
+    }
 
 }

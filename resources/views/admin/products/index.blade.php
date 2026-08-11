@@ -1,60 +1,162 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <title>Ürün Listesi</title>
-</head>
-<body>
+@extends('layouts.admin')
 
-<h1>Ürün Listesi</h1>
+@section('content')
 
-<table border="1">
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
 
-    <tr>
-        <th>ID</th>
-        <th>Ürün Adı</th>
-        <th>Kategori</th>
-        <th>Barkod</th>
-        <th>Durum</th>
-        <th>Düzenle</th>
-        <th>Sil</th>
-    </tr>
+    .page-header h1 {
+        margin: 0;
+    }
 
-    @foreach ($products as $product)
+    .add-button,
+    .back-button {
+        display: inline-block;
+        padding: 10px 16px;
+        border-radius: 7px;
+        text-decoration: none;
+        font-size: 14px;
+    }
 
+    .add-button {
+        background: #222;
+        color: white;
+    }
+
+    .back-button {
+        background: #e5e5e5;
+        color: #222;
+        margin-top: 20px;
+    }
+
+    .message {
+        padding: 12px;
+        margin-bottom: 20px;
+        border-radius: 7px;
+        background: #f1f1f1;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    th,
+    td {
+        padding: 14px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background: #f3f3f3;
+    }
+
+    .edit-link {
+        color: #1976d2;
+        text-decoration: none;
+    }
+
+    .delete-link {
+        color: #c62828;
+        text-decoration: none;
+    }
+</style>
+
+<div class="page-header">
+
+    <h1>Ürün Yönetimi</h1>
+
+    <a href="{{ route('admin.products.create') }}" class="add-button">
+        + Yeni Ürün Ekle
+    </a>
+
+</div>
+
+@if (session('success'))
+    <div class="message">
+        {{ session('success') }}
+    </div>
+@endif
+
+<table>
+
+    <thead>
         <tr>
-
-            <td>{{ $product->id }}</td>
-
-            <td>{{ $product->product_title }}</td>
-
-            <td>
-                {{ $product->category?->category_title ?? 'Kategori yok' }}
-            </td>
-
-            <td>{{ $product->barcode }}</td>
-
-            <td>
-                {{ $product->status ? 'Aktif' : 'Pasif' }}
-            </td>
-
-            <td>
-                <a href="{{ route('admin.products.edit', $product->id) }}">
-                    Düzenle
-                </a>
-            </td>
-
-            <td>
-                <a href="{{ route('admin.products.delete', $product->id) }}">
-                    Sil
-                </a>
-            </td>
-
+            <th>ID</th>
+            <th>Ürün Adı</th>
+            <th>Kategori</th>
+            <th>Barkod</th>
+            <th>Durum</th>
+            <th>Düzenle</th>
+            <th>Sil</th>
         </tr>
+    </thead>
 
-    @endforeach
+    <tbody>
+
+        @forelse ($products as $product)
+
+            <tr>
+
+                <td>{{ $product->id }}</td>
+
+                <td>{{ $product->product_title }}</td>
+
+                <td>
+                    {{ $product->category?->category_title ?? 'Kategori yok' }}
+                </td>
+
+                <td>{{ $product->barcode }}</td>
+
+                <td>
+                    {{ $product->status ? 'Aktif' : 'Pasif' }}
+                </td>
+
+                <td>
+                    <a
+                        href="{{ route('admin.products.edit', $product->id) }}"
+                        class="edit-link"
+                    >
+                        Düzenle
+                    </a>
+                </td>
+
+                <td>
+                    <a
+                        href="{{ route('admin.products.delete', $product->id) }}"
+                        class="delete-link"
+                    >
+                        Sil
+                    </a>
+                </td>
+
+            </tr>
+
+        @empty
+
+            <tr>
+                <td colspan="7">
+                    Kayıtlı ürün bulunamadı.
+                </td>
+            </tr>
+
+        @endforelse
+
+    </tbody>
 
 </table>
 
-</body>
-</html>
+<a href="{{ route('admin.dashboard') }}" class="back-button">
+    ← Admin Panele Dön
+</a>
+
+@endsection

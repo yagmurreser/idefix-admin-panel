@@ -1,110 +1,162 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <title>Ürün Düzenle</title>
-</head>
-<body>
+@extends('layouts.admin')
 
-<h1>Ürün Düzenle</h1>
+@section('content')
 
-@if ($errors->any())
-    <ul>
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-@endif
+<style>
+    .form-card {
+        max-width: 600px;
+        margin: 0 auto;
+    }
 
-<form
-    method="POST"
-    action="{{ route('admin.products.update', $product->id) }}"
->
-    @csrf
-    @method('PUT')
+    .form-card h1 {
+        margin-bottom: 25px;
+    }
 
-    <label for="product_title">Ürün Adı</label>
-    <br>
+    .form-group {
+        margin-bottom: 20px;
+    }
 
-    <input
-        type="text"
-        id="product_title"
-        name="product_title"
-        value="{{ old('product_title', $product->product_title) }}"
-    >
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
 
-    <br><br>
+    input,
+    select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 7px;
+        font-size: 15px;
+    }
 
-    <label for="category_id">Kategori</label>
-    <br>
+    input:focus,
+    select:focus {
+        outline: none;
+        border-color: #222;
+    }
 
-    <select id="category_id" name="category_id">
+    .save-button {
+        background: #222;
+        color: white;
+        border: none;
+        padding: 11px 18px;
+        border-radius: 7px;
+        cursor: pointer;
+        font-size: 14px;
+    }
 
-        <option value="">
-            Kategori Seçme
-        </option>
+    .back-button {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 16px;
+        background: #e5e5e5;
+        color: #222;
+        text-decoration: none;
+        border-radius: 7px;
+    }
 
-        @foreach ($categories as $category)
+    .error-box {
+        background: #ffe5e5;
+        color: #b00020;
+        padding: 12px;
+        border-radius: 7px;
+        margin-bottom: 20px;
+    }
+</style>
 
-            <option
-                value="{{ $category->id }}"
-                {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}
+<div class="form-card">
+
+    <h1>Ürün Düzenle</h1>
+
+    @if ($errors->any())
+        <div class="error-box">
+            @foreach ($errors->all() as $error)
+                <div>{{ $error }}</div>
+            @endforeach
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('admin.products.update', $product->id) }}">
+        @csrf
+        @method('PUT')
+
+        <div class="form-group">
+            <label for="product_title">Ürün Adı</label>
+
+            <input
+                type="text"
+                id="product_title"
+                name="product_title"
+                value="{{ old('product_title', $product->product_title) }}"
             >
-                {{ $category->category_title }}
-            </option>
+        </div>
 
-        @endforeach
+        <div class="form-group">
+            <label for="category_id">Kategori</label>
 
-    </select>
+            <select id="category_id" name="category_id">
 
-    <br><br>
+                <option value="">
+                    Kategori Seçiniz
+                </option>
 
-    <label for="barcode">Barkod</label>
-    <br>
+                @foreach ($categories as $category)
+                    <option
+                        value="{{ $category->id }}"
+                        {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}
+                    >
+                        {{ $category->category_title }}
+                    </option>
+                @endforeach
 
-    <input
-        type="text"
-        id="barcode"
-        name="barcode"
-        value="{{ old('barcode', $product->barcode) }}"
-    >
+            </select>
+        </div>
 
-    <br><br>
+        <div class="form-group">
+            <label for="barcode">Barkod</label>
 
-    <label for="status">Durum</label>
-    <br>
+            <input
+                type="text"
+                id="barcode"
+                name="barcode"
+                value="{{ old('barcode', $product->barcode) }}"
+            >
+        </div>
 
-    <select id="status" name="status">
+        <div class="form-group">
+            <label for="status">Durum</label>
 
-        <option
-            value="1"
-            {{ old('status', (string) $product->status) === '1' ? 'selected' : '' }}
-        >
-            Aktif
-        </option>
+            <select id="status" name="status">
 
-        <option
-            value="0"
-            {{ old('status', (string) $product->status) === '0' ? 'selected' : '' }}
-        >
-            Pasif
-        </option>
+                <option
+                    value="1"
+                    {{ old('status', (string) $product->status) === '1' ? 'selected' : '' }}
+                >
+                    Aktif
+                </option>
 
-    </select>
+                <option
+                    value="0"
+                    {{ old('status', (string) $product->status) === '0' ? 'selected' : '' }}
+                >
+                    Pasif
+                </option>
 
-    <br><br>
+            </select>
+        </div>
 
-    <button type="submit">
-        Güncelle
-    </button>
+        <button type="submit" class="save-button">
+            Güncelle
+        </button>
 
-</form>
+    </form>
 
-<br>
+    <a href="{{ route('admin.products.index') }}" class="back-button">
+        ← Ürün Listesine Dön
+    </a>
 
-<a href="{{ route('admin.products.index') }}">
-    Ürün Listesine Dön
-</a>
+</div>
 
-</body>
-</html>
+@endsection

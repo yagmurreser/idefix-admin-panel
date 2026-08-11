@@ -1,24 +1,100 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <title>Kategori Listesi</title>
-</head>
-<body>
+@extends('layouts.admin')
 
-<h1>Kategori Listesi</h1>
+@section('content')
+
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .page-header h1 {
+        margin: 0;
+    }
+
+    .add-button,
+    .back-button {
+        display: inline-block;
+        padding: 10px 16px;
+        border-radius: 7px;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    .add-button {
+        background: #222;
+        color: white;
+    }
+
+    .back-button {
+        background: #e5e5e5;
+        color: #222;
+        margin-top: 20px;
+    }
+
+    .message {
+        padding: 12px;
+        margin-bottom: 20px;
+        border-radius: 7px;
+        background: #f1f1f1;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    th,
+    td {
+        padding: 14px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background: #f3f3f3;
+    }
+
+    .edit-link {
+        color: #1976d2;
+        text-decoration: none;
+        margin-right: 12px;
+    }
+
+    .delete-link {
+        color: #c62828;
+        text-decoration: none;
+    }
+
+    .status-active {
+        font-weight: bold;
+    }
+
+    .status-passive {
+        color: #777;
+    }
+</style>
+
+<div class="page-header">
+    <h1>Kategori Yönetimi</h1>
+
+    <a href="{{ route('admin.categories.create') }}" class="add-button">
+        + Yeni Kategori Ekle
+    </a>
+</div>
 
 @if (session('success'))
-    <p>{{ session('success') }}</p>
+    <div class="message">
+        {{ session('success') }}
+    </div>
 @endif
 
-<a href="{{ route('admin.categories.create') }}">
-    Yeni Kategori Ekle
-</a>
-
-<hr>
-
-<table border="1" cellpadding="10">
+<table>
     <thead>
         <tr>
             <th>ID</th>
@@ -33,27 +109,36 @@
         @forelse ($categories as $category)
             <tr>
                 <td>{{ $category->id }}</td>
+
                 <td>{{ $category->category_title }}</td>
+
                 <td>{{ $category->category_description }}</td>
+
                 <td>
                     @if ($category->status)
-                        Aktif
+                        <span class="status-active">Aktif</span>
                     @else
-                        Pasif
+                        <span class="status-passive">Pasif</span>
                     @endif
                 </td>
+
                 <td>
-                    <a href="{{ route('admin.categories.edit', $category->id) }}">
+                    <a
+                        href="{{ route('admin.categories.edit', $category->id) }}"
+                        class="edit-link"
+                    >
                         Düzenle
                     </a>
 
-                    |
-
-                    <a href="{{ route('admin.categories.delete', $category->id) }}">
+                    <a
+                        href="{{ route('admin.categories.delete', $category->id) }}"
+                        class="delete-link"
+                    >
                         Sil
                     </a>
                 </td>
             </tr>
+
         @empty
             <tr>
                 <td colspan="5">
@@ -64,5 +149,8 @@
     </tbody>
 </table>
 
-</body>
-</html>
+<a href="{{ route('admin.dashboard') }}" class="back-button">
+    ← Admin Panele Dön
+</a>
+
+@endsection

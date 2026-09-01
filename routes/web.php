@@ -39,7 +39,7 @@ Route::middleware('auth')->group(function () {
         ->name('admin.categories.destroy');
 
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return view('admin.dashboard');
     })->name('dashboard');
 
     Route::get('/admin/users', [AdminUserController::class, 'index'])

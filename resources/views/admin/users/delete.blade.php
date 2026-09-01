@@ -1,37 +1,99 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <title>Kullanıcı Sil</title>
-</head>
-<body>
+@extends('layouts.admin')
 
-<h1>Kullanıcı Sil</h1>
+@section('content')
 
-<p>Bu kullanıcıyı silmek istediğinize emin misiniz?</p>
+<style>
+    .delete-card {
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+    }
 
-<p>
-    <strong>Username:</strong> {{ $user->username }}
-</p>
+    .delete-card h1 {
+        margin-bottom: 15px;
+    }
 
-<p>
-    <strong>User Title:</strong> {{ $user->user_title }}
-</p>
+    .warning {
+        margin-bottom: 25px;
+        color: #555;
+    }
 
-<form method="POST" action="{{ route('admin.users.destroy', $user->id) }}">
-    @csrf
-    @method('DELETE')
+    .user-info {
+        text-align: left;
+        background: #f5f5f5;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 25px;
+    }
 
-    <button type="submit">
-        Sil
-    </button>
-</form>
+    .user-info p {
+        margin: 10px 0;
+    }
 
-<br>
+    .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+    }
 
-<a href="{{ route('admin.users.index') }}">
-    Vazgeç
-</a>
+    .delete-button {
+        background: #c62828;
+        color: white;
+        border: none;
+        padding: 11px 20px;
+        border-radius: 7px;
+        cursor: pointer;
+        font-size: 14px;
+    }
 
-</body>
-</html>
+    .cancel-button {
+        display: inline-block;
+        background: #e5e5e5;
+        color: #222;
+        text-decoration: none;
+        padding: 11px 20px;
+        border-radius: 7px;
+        font-size: 14px;
+    }
+</style>
+
+<div class="delete-card">
+
+    <h1>Kullanıcı Sil</h1>
+
+    <p class="warning">
+        Bu kullanıcıyı silmek istediğinize emin misiniz?
+    </p>
+
+    <div class="user-info">
+        <p>
+            <strong>Kullanıcı Adı:</strong>
+            {{ $user->username }}
+        </p>
+
+        <p>
+            <strong>Kullanıcı Ünvanı:</strong>
+            {{ $user->user_title }}
+        </p>
+    </div>
+
+    <div class="button-group">
+
+        <form method="POST" action="{{ route('admin.users.destroy', $user->id) }}">
+            @csrf
+            @method('DELETE')
+
+            <button type="submit" class="delete-button">
+                Sil
+            </button>
+        </form>
+
+        <a href="{{ route('admin.users.index') }}" class="cancel-button">
+            Vazgeç
+        </a>
+
+    </div>
+
+</div>
+
+@endsection

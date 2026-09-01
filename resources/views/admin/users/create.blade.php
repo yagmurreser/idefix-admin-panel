@@ -1,54 +1,120 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <title>Kullanıcı Ekle</title>
-</head>
-<body>
+@extends('layouts.admin')
 
-<h1>
-    
-@if ($errors->any())
-    <div>
-        <ul>
+@section('content')
+
+<style>
+    .form-card {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .form-card h1 {
+        margin-bottom: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 7px;
+        font-size: 15px;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #222;
+    }
+
+    .save-button {
+        background: #222;
+        color: white;
+        border: none;
+        padding: 11px 18px;
+        border-radius: 7px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .back-button {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 16px;
+        background: #e5e5e5;
+        color: #222;
+        text-decoration: none;
+        border-radius: 7px;
+    }
+
+    .error-box {
+        background: #ffe5e5;
+        color: #b00020;
+        padding: 12px;
+        border-radius: 7px;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="form-card">
+
+    <h1>Yeni Kullanıcı Ekle</h1>
+
+    @if ($errors->any())
+        <div class="error-box">
             @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
+                <div>{{ $error }}</div>
             @endforeach
-        </ul>
-    </div>
-@endif
+        </div>
+    @endif
 
-Yeni Kullanıcı Ekle</h1>
+    <form method="POST" action="{{ route('admin.users.store') }}">
+        @csrf
 
-<form method="POST" action="{{ route('admin.users.store') }}">
-    @csrf
+        <div class="form-group">
+            <label>Kullanıcı Adı</label>
+            <input
+                type="text"
+                name="username"
+                value="{{ old('username') }}"
+            >
+        </div>
 
-    <label>Username</label>
-    <input type="text" name="username">
+        <div class="form-group">
+            <label>Kullanıcı Ünvanı</label>
+            <input
+                type="text"
+                name="user_title"
+                value="{{ old('user_title') }}"
+            >
+        </div>
 
-    <br><br>
+        <div class="form-group">
+            <label>Şifre</label>
+            <input
+                type="password"
+                name="password"
+            >
+        </div>
 
-    <label>User Title</label>
-    <input type="text" name="user_title">
+        <button type="submit" class="save-button">
+            Kaydet
+        </button>
 
-    <br><br>
+    </form>
 
-    <label>Password</label>
-    <input type="password" name="password">
-
-    <br><br>
-
-    <button type="submit">
-        Kaydet
-    </button>
-
-    <br><br>
-
-    <a href="{{ route('admin.users.index') }}">
-        Kullanıcı listesine dön
+    <a href="{{ route('admin.users.index') }}" class="back-button">
+        ← Kullanıcı Listesine Dön
     </a>
 
-</form>
+</div>
 
-</body>
-</html>
+@endsection

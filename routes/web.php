@@ -39,8 +39,12 @@ Route::middleware('auth')->group(function () {
         ->name('admin.categories.destroy');
 
     Route::get('/dashboard', function () {
-        return view('admin.dashboard');
+    return view('admin.dashboard');
     })->name('dashboard');
+
+    Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+    })->name('admin.dashboard');
 
     Route::get('/admin/users', [AdminUserController::class, 'index'])
         ->name('admin.users.index');
@@ -87,6 +91,8 @@ Route::middleware('auth')->group(function () {
     
     Route::put('/admin/products/{product}', [ProductController::class, 'update'])
         ->name('admin.products.update');
+
+    
         
 
 

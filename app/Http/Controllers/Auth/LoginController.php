@@ -20,6 +20,8 @@ class LoginController extends Controller
             'password' => ['required', 'string'],
         ]);
 
+        $credentials['role'] = 'admin';
+
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 

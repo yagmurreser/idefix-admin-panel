@@ -15,11 +15,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-       User::create([
-    'username' => 'admin',
-    'user_title' => 'Sistem Yöneticisi',
-    'password' => '123456',
-]);
-    
+        User::updateOrCreate(
+            ['username' => 'admin'],
+            [
+                'user_title' => 'Sistem Yöneticisi',
+                'password' => '123456',
+            ]
+        );
+
+        $this->call([
+            AuthorSeeder::class,
+            CategorySeeder::class,
+            CampaignSeeder::class,
+        ]);
     }
 }

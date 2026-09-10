@@ -29,7 +29,6 @@ class CampaignEvaluator
         $bestDiscount = 0;
 
         foreach ($campaigns as $campaign) {
-
             $discount = match ($campaign->type) {
                 'category_discount' =>
                     $this->calculateCategoryDiscount($campaign, $items),

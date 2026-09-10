@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İdefix Admin Panel</title>
+    <title>idefix Giriş</title>
 
     <style>
         * {
@@ -13,24 +13,49 @@
         body {
             margin: 0;
             min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
+            padding: 20px;
         }
 
         .login-card {
-            width: 380px;
+            width: 100%;
+            max-width: 430px;
             background: white;
             padding: 35px;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+            border-radius: 14px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
         }
 
-        .login-card h2 {
+        .brand {
             text-align: center;
             margin-bottom: 30px;
+        }
+
+        .brand h1 {
+            margin: 0 0 8px;
+            font-size: 32px;
+        }
+
+        .brand p {
+            margin: 0;
+            color: #666;
+        }
+
+        .error-box {
+            background: #fdecec;
+            color: #9f1d1d;
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .error-box ul {
+            margin: 0;
+            padding-left: 20px;
         }
 
         .form-group {
@@ -45,38 +70,56 @@
 
         input {
             width: 100%;
-            padding: 12px;
+            padding: 12px 13px;
             border: 1px solid #ccc;
-            border-radius: 7px;
+            border-radius: 8px;
             font-size: 15px;
         }
 
         input:focus {
             outline: none;
-            border-color: #333;
+            border-color: #555;
         }
 
-        button {
+        .login-button {
             width: 100%;
-            padding: 12px;
+            padding: 13px;
             border: none;
-            border-radius: 7px;
+            border-radius: 8px;
             background: #222;
             color: white;
             font-size: 16px;
             cursor: pointer;
         }
 
-        button:hover {
-            background: #444;
+        .login-button:hover {
+            background: #333;
         }
 
-        .error {
-            margin-bottom: 20px;
-            padding: 10px;
-            background: #ffe5e5;
-            border-radius: 6px;
-            color: #b00020;
+        .register-area {
+            text-align: center;
+            margin-top: 22px;
+            color: #666;
+        }
+
+        .register-area a {
+            color: #222;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .register-area a:hover {
+            text-decoration: underline;
+        }
+
+        .info-box {
+            margin-top: 25px;
+            padding: 13px;
+            background: #f7f7f7;
+            border-radius: 8px;
+            color: #666;
+            font-size: 13px;
+            text-align: center;
         }
     </style>
 </head>
@@ -85,41 +128,71 @@
 
 <div class="login-card">
 
-    <h2>İdefix Admin Girişi</h2>
+    <div class="brand">
+        <h1>idefix</h1>
+        <p>Hesabınıza giriş yapın</p>
+    </div>
 
-    @if (session('error'))
-        <div class="error">
-            {{ session('error') }}
+    @if ($errors->any())
+        <div class="error-box">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
     @endif
 
-    <form method="POST" action="{{ route('login.submit') }}">
+    <form
+        method="POST"
+        action="{{ route('login.submit') }}"
+    >
         @csrf
 
         <div class="form-group">
-            <label>Kullanıcı Adı</label>
+            <label for="username">
+                Kullanıcı Adı
+            </label>
+
             <input
+                id="username"
                 type="text"
                 name="username"
+                value="{{ old('username') }}"
                 required
+                autofocus
             >
         </div>
 
         <div class="form-group">
-            <label>Şifre</label>
+            <label for="password">
+                Şifre
+            </label>
+
             <input
+                id="password"
                 type="password"
                 name="password"
                 required
             >
         </div>
 
-        <button type="submit">
+        <button
+            type="submit"
+            class="login-button"
+        >
             Giriş Yap
         </button>
-
     </form>
 
+    <div class="register-area">
+        Hesabınız yok mu?
+        <a href="{{ route('customer.register') }}">
+            Kayıt Ol
+        </a>
+    </div>
+
+    
 </div>
 
 </body>

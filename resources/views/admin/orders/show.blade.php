@@ -1,6 +1,4 @@
-@extends('layouts.customer')
-
-@section('title', 'Sipariş Detayı')
+@extends('layouts.admin')
 
 @section('content')
 
@@ -9,10 +7,10 @@
     <h1>Sipariş Detayı</h1>
 
     <a
-        href="{{ route('customer.orders.index') }}"
-        class="button"
+        href="{{ route('admin.orders.index') }}"
+        class="button button-secondary"
     >
-        Siparişlerime Dön
+        Siparişlere Dön
     </a>
 
 </div>
@@ -31,25 +29,34 @@
 
     <div class="order-info-card">
 
-        <strong>Sipariş Tarihi</strong>
+        <strong>Müşteri</strong>
 
-        {{ $order->created_at?->format('d.m.Y H:i') }}
+        {{ $order->user?->user_title ?? 'Kullanıcı bulunamadı' }}
 
     </div>
 
 
     <div class="order-info-card">
 
-        <strong>Kampanya</strong>
+        <strong>Kullanıcı Adı</strong>
 
-        {{ $order->campaign?->name ?? 'Kampanya uygulanmadı' }}
+        {{ $order->user?->username ?? '-' }}
+
+    </div>
+
+
+    <div class="order-info-card">
+
+        <strong>Sipariş Tarihi</strong>
+
+        {{ $order->created_at?->format('d.m.Y H:i') }}
 
     </div>
 
 </div>
 
 
-<h2>Ürünler</h2>
+<h2>Sipariş Ürünleri</h2>
 
 <table class="admin-table">
 
@@ -95,11 +102,11 @@
 </table>
 
 
-<div class="summary">
+<div class="order-summary">
 
     <div class="summary-row">
 
-        <span>İndirim Öncesi Tutar</span>
+        <span>Ara Toplam</span>
 
         <strong>
             {{ number_format($order->subtotal, 2) }} TL
@@ -121,7 +128,7 @@
 
     <div class="summary-row">
 
-        <span>İndirim Tutarı</span>
+        <span>İndirim</span>
 
         <strong>
             {{ number_format($order->discount_amount, 2) }} TL

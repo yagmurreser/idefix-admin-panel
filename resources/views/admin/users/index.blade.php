@@ -79,67 +79,66 @@
         color: #c62828;
         text-decoration: none;
     }
+
     .modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.45);
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.45);
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
     }
 
     .modal-content {
-    width: 420px;
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        width: 420px;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     }
 
     .modal-content h3 {
-    margin-top: 0;
-    font-size: 22px;
+        margin-top: 0;
+        font-size: 22px;
     }
 
     .modal-content p {
-    margin: 20px 0 25px;
-    font-size: 16px;
+        margin: 20px 0 25px;
+        font-size: 16px;
     }
 
-   .modal-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+    .modal-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
     }
 
     .cancel-button {
-    padding: 10px 18px;
-    border: none;
-    border-radius: 7px;
-    background: #e5e5e5;
-    cursor: pointer;
-   }
+        padding: 10px 18px;
+        border: none;
+        border-radius: 7px;
+        background: #e5e5e5;
+        cursor: pointer;
+    }
 
     .confirm-delete-button {
-    padding: 10px 18px;
-    border: none;
-    border-radius: 7px;
-    background: #c62828;
-    color: white;
-    cursor: pointer;
-   }
-
-
+        padding: 10px 18px;
+        border: none;
+        border-radius: 7px;
+        background: #c62828;
+        color: white;
+        cursor: pointer;
+    }
 </style>
 
 
 <div class="page-header">
 
-    <h1>Admin Kullanıcı Yönetimi</h1>
+    <h1>Kullanıcı Yönetimi</h1>
 
     <a href="{{ route('admin.users.create') }}" class="add-button">
         + Yeni Kullanıcı Ekle
@@ -162,21 +161,21 @@
 @endif
 
 
-    <form
+<form
     id="bulkDeleteForm"
     method="POST"
     action="{{ route('admin.users.bulkDelete') }}"
-    >
+>
     @csrf
     @method('DELETE')
 
     <button
-    type="button"
-    class="delete-button"
-    onclick="openDeleteModal()"
->
-    Seçilenleri Sil
-</button>
+        type="button"
+        class="delete-button"
+        onclick="openDeleteModal()"
+    >
+        Seçilenleri Sil
+    </button>
 
 
     <table>
@@ -186,7 +185,8 @@
                 <th>Seç</th>
                 <th>ID</th>
                 <th>Kullanıcı Adı</th>
-                <th>Yetki</th>
+                <th>Ad Soyad / Ünvan</th>
+                <th>Rol</th>
                 <th>İşlemler</th>
             </tr>
         </thead>
@@ -223,6 +223,17 @@
 
 
                     <td>
+                        @if ($user->role === 'admin')
+                            Admin
+                        @elseif ($user->role === 'customer')
+                            Customer
+                        @else
+                            {{ $user->role ?? '-' }}
+                        @endif
+                    </td>
+
+
+                    <td>
 
                         <a
                             href="{{ route('admin.users.edit', $user->id) }}"
@@ -246,7 +257,7 @@
             @empty
 
                 <tr>
-                    <td colspan="5">
+                    <td colspan="6">
                         Kayıtlı kullanıcı bulunamadı.
                     </td>
                 </tr>
@@ -261,22 +272,39 @@
 
 
 <div id="deleteModal" class="modal">
+
     <div class="modal-content">
+
         <h3>Silme Onayı</h3>
 
-        <p>Seçilen kullanıcıları silmek istediğinize emin misiniz?</p>
+        <p>
+            Seçilen kullanıcıları silmek istediğinize emin misiniz?
+        </p>
 
         <div class="modal-buttons">
-            <button type="button" class="cancel-button" onclick="closeDeleteModal()">
+
+            <button
+                type="button"
+                class="cancel-button"
+                onclick="closeDeleteModal()"
+            >
                 İptal
             </button>
 
-            <button type="button" class="confirm-delete-button" onclick="confirmDelete()">
+            <button
+                type="button"
+                class="confirm-delete-button"
+                onclick="confirmDelete()"
+            >
                 Evet, Sil
             </button>
+
         </div>
+
     </div>
+
 </div>
+
 
 <script>
     function openDeleteModal() {

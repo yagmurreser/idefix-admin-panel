@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -20,17 +21,35 @@ class LoginController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        $credentials['role'] = 'admin';
+        if (!Auth::attempt($credentials)) {
+            return back()
+                ->withErrors([
+                    'username' => 'Kullanıcı adı veya şifre hatalı.',
+                ])
+                ->onlyInput('username');
+        }
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+        $request->session()->regenerate();
 
+        /** @var User $user */
+        $user = Auth::user();
+
+        if ($user->isAdmin()) {
             return redirect()->route('dashboard');
         }
 
+        if ($user->isCustomer()) {
+            return redirect()->route('customer.shop');
+        }
+
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return back()
             ->withErrors([
-                'username' => 'Kullanıcı adı veya şifre hatalı.',
+                'username' => 'Bu kullanıcı için geçerli bir rol bulunamadı.',
             ])
             ->onlyInput('username');
     }

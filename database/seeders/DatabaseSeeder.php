@@ -10,9 +10,6 @@ class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
         User::updateOrCreate(
@@ -20,12 +17,14 @@ class DatabaseSeeder extends Seeder
             [
                 'user_title' => 'Sistem Yöneticisi',
                 'password' => '123456',
+                'role' => 'admin',
             ]
         );
 
         $this->call([
             AuthorSeeder::class,
             CategorySeeder::class,
+            ProductSeeder::class,
             CampaignSeeder::class,
         ]);
     }

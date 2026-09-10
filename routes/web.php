@@ -9,11 +9,12 @@ use App\Http\Controllers\CustomerShopController;
 use App\Http\Controllers\CustomerCartController;
 use App\Http\Controllers\CustomerCheckoutController;
 use App\Http\Controllers\CustomerOrderController;
+use App\Http\Controllers\AdminOrderController;
 use Illuminate\Support\Facades\Route;
 
 
 /*
- Admin Authentication
+ Authentication
 */
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])
@@ -27,7 +28,7 @@ Route::post('/logout', [LoginController::class, 'logout'])
 
 
 /*
- Customer Authentication
+ Customer Registration
 */
 
 Route::get('/customer/register', [CustomerAuthController::class, 'showRegisterForm'])
@@ -36,21 +37,15 @@ Route::get('/customer/register', [CustomerAuthController::class, 'showRegisterFo
 Route::post('/customer/register', [CustomerAuthController::class, 'register'])
     ->name('customer.register.submit');
 
-Route::get('/customer/login', [CustomerAuthController::class, 'showLoginForm'])
-    ->name('customer.login');
-
-Route::post('/customer/login', [CustomerAuthController::class, 'login'])
-    ->name('customer.login.submit');
-
 
 /*
- Authenticated Routes
+ Admin Routes
 */
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'admin'])->group(function () {
 
     /*
-     Admin Panel
+    | Dashboard
     */
 
     Route::get('/dashboard', function () {
@@ -60,6 +55,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
+
+
+    /*
+    | Admin Orders
+    */
+
+    Route::get('/admin/orders', [AdminOrderController::class, 'index'])
+        ->name('admin.orders.index');
+
+    Route::get('/admin/orders/{order}', [AdminOrderController::class, 'show'])
+        ->name('admin.orders.show');
 
 
     /*
@@ -141,11 +147,14 @@ Route::middleware('auth')->group(function () {
 
     Route::put('/admin/products/{product}', [ProductController::class, 'update'])
         ->name('admin.products.update');
+});
 
 
-    /*
-     Customer Shop
-    */
+/*
+Customer Routes
+*/
+
+Route::middleware(['auth', 'customer'])->group(function () {
 
     Route::get('/shop', [CustomerShopController::class, 'index'])
         ->name('customer.shop');
@@ -162,9 +171,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout', [CustomerCheckoutController::class, 'store'])
         ->name('customer.checkout.store');
 
+    Route::get('/my-orders', [CustomerOrderController::class, 'index'])
+        ->name('customer.orders.index');
+
     Route::get('/my-orders/{orderNumber}', [CustomerOrderController::class, 'show'])
         ->name('customer.orders.show');
 
-    Route::post('/customer/logout', [CustomerAuthController::class, 'logout'])
+    Route::post('/customer/logout', [LoginController::class, 'logout'])
         ->name('customer.logout');
 });

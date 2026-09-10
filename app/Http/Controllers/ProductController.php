@@ -63,34 +63,43 @@ class ProductController extends Controller
     }
 
     public function update(Request $request, Product $product)
-    {
-        $validated = $request->validate([
-            'product_title' => [
-                'required',
-                'string',
-                'max:255',
-            ],
-            'category_id' => [
-                'nullable',
-                'exists:categories,id',
-            ],
-            'barcode' => [
-                'required',
-                'string',
-                'max:255',
-            ],
-            'status' => [
-                'required',
-                'boolean',
-            ],
-        ]);
+{
+    $validated = $request->validate([
+        'product_title' => [
+            'required',
+            'string',
+            'max:255',
+        ],
 
-        $product->update($validated);
+        'category_id' => [
+            'nullable',
+            'exists:categories,id',
+        ],
 
-        return redirect()
-            ->route('admin.products.index')
-            ->with('success', 'Ürün başarıyla güncellendi.');
-    }
+        'barcode' => [
+            'required',
+            'string',
+            'max:255',
+        ],
+
+        'status' => [
+            'required',
+            'boolean',
+        ],
+
+        'stock_quantity' => [
+            'required',
+            'integer',
+            'min:0',
+        ],
+    ]);
+
+    $product->update($validated);
+
+    return redirect()
+        ->route('admin.products.index')
+        ->with('success', 'Ürün başarıyla güncellendi.');
+}
 
     public function delete(Product $product)
     {

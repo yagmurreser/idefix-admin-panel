@@ -125,6 +125,24 @@
             >
         </div>
 
+          <div class="form-group">
+
+          <label for="stock_quantity">
+           Stok Miktarı
+        </label>
+
+        <input
+        type="number"
+        id="stock_quantity"
+        name="stock_quantity"
+        value="{{ old('stock_quantity', $product->stock_quantity) }}"
+        min="0"
+        required
+         >
+
+</div>
+
+
         <div class="form-group">
             <label for="status">Durum</label>
 

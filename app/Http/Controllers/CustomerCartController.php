@@ -3,43 +3,55 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
 use App\Services\CampaignEvaluator;
+use Illuminate\Http\Request;
 
 class CustomerCartController extends Controller
 {
     public function index(CampaignEvaluator $campaignEvaluator)
-{
-    $cart = session()->get('cart', []);
+    {
+        $cart = session()->get('cart', []);
 
-    $items = collect();
+        $items = collect();
 
-    foreach ($cart as $item) {
-        $product = \App\Models\Product::find($item['product_id']);
+        foreach ($cart as $item) {
+            $product = Product::find($item['product_id']);
 
-        if ($product) {
-            $items->push([
-                'product' => $product,
-                'quantity' => $item['quantity'],
-            ]);
+            if ($product) {
+                $items->push([
+                    'product' => $product,
+                    'quantity' => $item['quantity'],
+                ]);
+            }
         }
+
+        $subtotal = $items->sum(function ($item) {
+            return $item['product']->list_price * $item['quantity'];
+        });
+
+        $campaignResult = $campaignEvaluator->findBestCampaign(
+            $items,
+            $subtotal
+        );
+
+        $discountAmount = $campaignResult['discount_amount'];
+
+        $shippingAmount = $subtotal >= 50 ? 0 : 10;
+
+        $totalAmount = round(
+            $subtotal - $discountAmount + $shippingAmount,
+            2
+        );
+
+        return view('customer.cart.index', compact(
+            'cart',
+            'subtotal',
+            'campaignResult',
+            'discountAmount',
+            'shippingAmount',
+            'totalAmount'
+        ));
     }
-
-    $subtotal = $items->sum(function ($item) {
-        return $item['product']->list_price * $item['quantity'];
-    });
-
-    $campaignResult = $campaignEvaluator->findBestCampaign(
-        $items,
-        $subtotal
-    );
-
-    return view('customer.cart.index', compact(
-        'cart',
-        'subtotal',
-        'campaignResult'
-    ));
-}
 
     public function add(Request $request, Product $product)
     {

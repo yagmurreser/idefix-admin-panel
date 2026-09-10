@@ -1,101 +1,178 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sepetim</title>
-</head>
-<body>
+@extends('layouts.customer')
+
+@section('title', 'Sepetim')
+
+@section('content')
+
+<div class="page-header">
 
     <h1>Sepetim</h1>
 
-    <a href="{{ route('customer.shop') }}">
-        ← Alışverişe Devam Et
+    <a
+        href="{{ route('customer.shop') }}"
+        class="button"
+    >
+        Alışverişe Devam Et
     </a>
 
-    @if (session('success'))
-        <p>{{ session('success') }}</p>
-    @endif
+</div>
 
-    @if (empty($cart))
 
-        <p>Sepetiniz boş.</p>
+@if (empty($cart))
 
-    @else
+    <p>Sepetiniz boş.</p>
 
-        @php
-            $subtotal = 0;
-        @endphp
+@else
 
-        @foreach ($cart as $item)
+    @foreach ($cart as $item)
 
-            @php
-                $lineTotal = $item['unit_price'] * $item['quantity'];
-                $subtotal += $lineTotal;
-            @endphp
+        <div class="cart-item">
 
-            <hr>
-
-            <h3>{{ $item['product_title'] }}</h3>
+            <h3>
+                {{ $item['product_title'] }}
+            </h3>
 
             <p>
-                Birim Fiyat:
+                <strong>Birim Fiyat:</strong>
                 {{ number_format($item['unit_price'], 2) }} TL
             </p>
 
             <p>
-                Adet:
+                <strong>Adet:</strong>
                 {{ $item['quantity'] }}
             </p>
 
             <p>
-                Ürün Toplamı:
-                {{ number_format($lineTotal, 2) }} TL
+                <strong>Ürün Toplamı:</strong>
+
+                {{
+                    number_format(
+                        $item['unit_price'] * $item['quantity'],
+                        2
+                    )
+                }} TL
             </p>
 
             <form
                 method="POST"
-                action="{{ route('customer.cart.remove', $item['product_id']) }}"
+                action="{{ route(
+                    'customer.cart.remove',
+                    $item['product_id']
+                ) }}"
             >
                 @csrf
                 @method('DELETE')
 
-                <button type="submit">
+                <button
+                    type="submit"
+                    class="button button-danger"
+                >
                     Sepetten Çıkar
                 </button>
+
             </form>
 
-        @endforeach
+        </div>
 
-        <hr>
+    @endforeach
 
-        <h2>
-            Ara Toplam:
-            {{ number_format($subtotal, 2) }} TL
-        </h2>
-      <form method="POST" action="{{ route('customer.checkout.store') }}">
-        @csrf
 
-    <button type="submit">
-        Siparişi Tamamla
-    </button>
+    <div class="summary">
+
+        <div class="summary-row">
+
+            <span>Ara Toplam</span>
+
+            <strong>
+                {{ number_format($subtotal, 2) }} TL
+            </strong>
+
+        </div>
+
+
+        <div class="summary-row">
+
+            <span>Uygulanan Kampanya</span>
+
+            <strong>
+
+                @if ($campaignResult['campaign'])
+
+                    {{ $campaignResult['campaign']->name }}
+
+                @else
+
+                    Kampanya yok
+
+                @endif
+
+            </strong>
+
+        </div>
+
+
+        <div class="summary-row">
+
+            <span>İndirim</span>
+
+            <strong>
+                {{ number_format($discountAmount, 2) }} TL
+            </strong>
+
+        </div>
+
+
+        <div class="summary-row">
+
+            <span>Kargo</span>
+
+            <strong>
+
+                @if ($shippingAmount == 0)
+
+                    Ücretsiz
+
+                @else
+
+                    {{ number_format($shippingAmount, 2) }} TL
+
+                @endif
+
+            </strong>
+
+        </div>
+
+
+        <div class="summary-row summary-total">
+
+            <span>Ödenecek Tutar</span>
+
+            <span>
+                {{ number_format($totalAmount, 2) }} TL
+            </span>
+
+        </div>
+
+
+        <form
+            method="POST"
+            action="{{ route('customer.checkout.store') }}"
+            style="margin-top: 20px;"
+        >
+            @csrf
+
+            <button
+                type="submit"
+                class="button"
+                style="width: 100%;"
+            >
+                Siparişi Tamamla
+            </button>
+
         </form>
 
-    @endif 
+    </div>
 
-    @if ($campaignResult['campaign'])
-    <p>
-        Uygulanan Kampanya:
-        {{ $campaignResult['campaign']->name }}
-    </p>
+@endif
 
-    <p>
-        İndirim:
-        {{ number_format($campaignResult['discount_amount'], 2) }} TL
-    </p>
-    @else
-    <p>Uygun kampanya bulunamadı.</p>
-    @endif
-
-</body>
-</html>
+@endsection

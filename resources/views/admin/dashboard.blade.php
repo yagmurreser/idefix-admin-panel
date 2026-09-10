@@ -1,102 +1,61 @@
-<!DOCTYPE html>
-<html lang="tr">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@section('content')
 
-    <title>idefix Admin Panel</title>
+<h1 class="dashboard-title">
+    Admin Panel
+</h1>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-        }
+<div class="dashboard-grid">
 
-        .container {
-            width: 500px;
-            margin: 100px auto;
-            text-align: center;
-        }
+    <a
+        href="{{ route('admin.users.index') }}"
+        class="dashboard-card"
+    >
+        <h3>Admin Kullanıcı Yönetimi</h3>
 
-        h1 {
-            margin-bottom: 40px;
-        }
+        <p>
+            Admin kullanıcılarını listeleyin,
+            oluşturun, düzenleyin ve yönetin.
+        </p>
+    </a>
 
-        .menu-item {
-            display: block;
-            width: 100%;
-            box-sizing: border-box;
-            padding: 20px;
-            margin-bottom: 20px;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            text-decoration: none;
-            color: black;
-            font-size: 20px;
-        }
+    <a
+        href="{{ route('admin.categories.index') }}"
+        class="dashboard-card"
+    >
+        <h3>Kategori Yönetimi</h3>
 
-        .menu-item:hover {
-            background: #eeeeee;
-        }
+        <p>
+            Ürün kategorilerini görüntüleyin
+            ve kategori işlemlerini yönetin.
+        </p>
+    </a>
 
-        .logout-form {
-            margin-top: 30px;
-        }
+    <a
+        href="{{ route('admin.products.index') }}"
+        class="dashboard-card"
+    >
+        <h3>Ürün Yönetimi</h3>
 
-        .logout-button {
-            width: 100%;
-            padding: 17px;
-            background: #c62828;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 18px;
-            cursor: pointer;
-        }
+        <p>
+            Ürünleri listeleyin,
+            oluşturun ve düzenleyin.
+        </p>
+    </a>
 
-        .logout-button:hover {
-            background: #a91f1f;
-        }
-    </style>
+    <a
+        href="{{ route('admin.orders.index') }}"
+        class="dashboard-card"
+    >
+        <h3>Sipariş Yönetimi</h3>
 
-</head>
+        <p>
+            Oluşturulan siparişleri görüntüleyin
+            ve sipariş detaylarını inceleyin.
+        </p>
+    </a>
 
-<body>
+</div>
 
-    <div class="container">
-
-        <h1>Admin Panel</h1>
-
-        <a class="menu-item" href="{{ route('admin.users.index') }}">
-            Admin Kullanıcı Yönetimi
-        </a>
-
-        <a class="menu-item" href="{{ route('admin.categories.index') }}">
-            Kategori Yönetimi
-        </a>
-
-        <a class="menu-item" href="{{ route('admin.products.index') }}">
-            Ürün Yönetimi
-        </a>
-
-        <form
-            method="POST"
-            action="{{ route('logout') }}"
-            class="logout-form"
-        >
-            @csrf
-
-            <button type="submit" class="logout-button">
-                Çıkış Yap
-            </button>
-
-        </form>
-
-    </div>
-
-</body>
-
-</html>
+@endsection

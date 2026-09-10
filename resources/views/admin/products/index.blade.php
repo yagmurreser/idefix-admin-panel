@@ -95,9 +95,11 @@
             <th>Ürün Adı</th>
             <th>Kategori</th>
             <th>Barkod</th>
+            <th>Stok</th>
             <th>Durum</th>
             <th>Düzenle</th>
             <th>Sil</th>
+            
         </tr>
     </thead>
 
@@ -116,6 +118,11 @@
                 </td>
 
                 <td>{{ $product->barcode }}</td>
+
+                <td>
+                    {{ $product->stock_quantity }}
+                </td>
+
 
                 <td>
                     {{ $product->status ? 'Aktif' : 'Pasif' }}
